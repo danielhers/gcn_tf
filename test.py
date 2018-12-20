@@ -1,8 +1,10 @@
-import tensorflow as tf
-from gcn import gcn
-import numpy as np
-import uuid
 import time
+import uuid
+
+import numpy as np
+import tensorflow as tf
+
+from gcn import gcn
 
 sample_size = 100000
 inputs_num = 3
@@ -55,7 +57,7 @@ with tf.Session() as sess:
 
     for step in range(sample_size):
         _, val, summary, out = sess.run([optimizer, cost, merged_summary_op, nn],
-                                   feed_dict={x: x_vals, e: edges, b: biases})
+                                        feed_dict={x: x_vals, e: edges, b: biases})
         if step % 5 == 0:
             summary_writer.add_summary(summary, step)
             print("step: {}, loss: {}".format(step, val))

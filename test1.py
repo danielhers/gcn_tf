@@ -1,8 +1,10 @@
-import tensorflow as tf
-from gcn import gcn
-import numpy as np
-import uuid
 import time
+import uuid
+
+import numpy as np
+import tensorflow as tf
+
+from gcn import gcn
 
 sample_size = 100000
 inputs_num = 3

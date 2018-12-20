@@ -1,22 +1,17 @@
-import six
-from six.moves import xrange  # pylint: disable=redefined-builtin
-import numpy as np
-
 from tensorflow import expand_dims
 from tensorflow import tile
 from tensorflow.python.framework import ops
 from tensorflow.python.framework import tensor_shape
-# from tensorflow.python.util.tf_export import tf_export
-from tensorflow.python.util import tf_decorator
-from tf_export import tf_export
 from tensorflow.python.layers import base
-from tensorflow.python.ops import logging_ops
-from tensorflow.python.ops import array_ops
-from tensorflow.python.ops import standard_ops
 from tensorflow.python.ops import init_ops
 from tensorflow.python.ops import math_ops
 from tensorflow.python.ops import special_math_ops
-from tensorflow.python.ops import nn
+from tensorflow.python.ops import standard_ops
+
+# from tensorflow.python.util.tf_export import tf_export
+from tf_export import tf_export
+
+
 # from tensorflow.python import math_ops
 # from tensorflow.contrib.eager import context
 

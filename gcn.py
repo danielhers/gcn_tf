@@ -1,22 +1,18 @@
-import six
-from six.moves import xrange  # pylint: disable=redefined-builtin
-import numpy as np
-
 from tensorflow import expand_dims
 from tensorflow import tile
 from tensorflow.python.framework import ops
 from tensorflow.python.framework import tensor_shape
-# from tensorflow.python.util.tf_export import tf_export
-from tensorflow.python.util import tf_decorator
-from tf_export import tf_export
 from tensorflow.python.layers import base
-from tensorflow.python.ops import logging_ops
-from tensorflow.python.ops import array_ops
-from tensorflow.python.ops import standard_ops
 from tensorflow.python.ops import init_ops
 from tensorflow.python.ops import math_ops
-from tensorflow.python.ops import special_math_ops
-from tensorflow.python.ops import nn
+from tensorflow.python.ops import standard_ops
+
+from tf_export import tf_export
+
+
+# from tensorflow.python.util.tf_export import tf_export
+
+
 # from tensorflow.python import math_ops
 # from tensorflow.contrib.eager import context
 
@@ -115,6 +111,8 @@ class GCN(base.Layer):
         self.gate_bias_constraint = gate_bias_constraint
         self.input_spec = [base.InputSpec(min_ndim=2), base.InputSpec(
             min_ndim=2), base.InputSpec(min_ndim=2)]
+        self.main_input_spec = self.kernel = self.gate_kernel = self.edges_spec = self.bias_labels_spec = self.bias = \
+            self.gate_bias = self.labels = self.bias_labels = None
 
     def build(self, input_shape):
         base_input_shape = tensor_shape.TensorShape(input_shape[0])
@@ -188,11 +186,13 @@ class GCN(base.Layer):
 
     def calculate_gates(self, inputs):
         if self.use_bias:
-            bias_shape = self.bias.get_shape().as_list()
+            # bias_shape = self.bias.get_shape().as_list()
             # bias gate
             biases = math_ops.reduce_sum(
                 math_ops.multiply(self.gate_bias, self.bias_labels), [-1])
             # print("gate bias shape", biases.get_shape().as_list())
+        else:
+            biases = 0
 
         x = ops.convert_to_tensor(inputs[0], dtype=self.dtype)
         # per neighbor, per label gating scalar
@@ -212,7 +212,6 @@ class GCN(base.Layer):
     def calculate_kernel(self, inputs):
         x = ops.convert_to_tensor(inputs[0], dtype=self.dtype)
         shape = x.get_shape().as_list()
-
 
         # print("kernel shape", self.kernel.get_shape().as_list())
         # print("inputs shape", shape)
@@ -242,7 +241,6 @@ class GCN(base.Layer):
     def call(self, inputs,  *args, **kwargs):
         # print("inputs", inputs)
         self.labels = math_ops.cast(ops.convert_to_tensor(inputs[1]), self.dtype)
-
 
         outputs = self.calculate_kernel(inputs)
 
